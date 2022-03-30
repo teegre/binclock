@@ -108,7 +108,7 @@ while :; do
   _sync
 
   [[ $f ]] && TIME="$(date '+%H %M %S')"
-  [[ $f ]] || TIME="$(LC_ALL=C date '+%I%p %M %S ')"
+  [[ $f ]] || TIME="$(LC_TIME=C date '+%I%p %M %S ')"
   
   # shellcheck disable=SC2162
   IFS=' ' read H M S <<< "$TIME"
