@@ -87,11 +87,15 @@ _sync() {
 hidecursor; stty -echo -icanon time 0 min 0; clear
 
 trap 'echo -en "\e[m"; showcursor; stty sane; exit' INT QUIT
+trap 'init_screen; h=""; m=""; s=""; p=""; clear' WINCH
 
-get_scr_size
-((oy=(LINES/2)))
-((ox=(COLUMNS/2)-4))
+init_screen() {
+  get_scr_size
+  ((oy=(LINES/2)-1))
+  ((ox=(COLUMNS/2)-3))
+}
 
+init_screen
 random_color
 
 declare h m s p
@@ -101,7 +105,7 @@ while :; do
   IFS= read key
   case $key in
     q | Q) clear; break ;;
-    r | R) clear; h=""; m=""; s=""; p="" ;;
+    r | R) clear; init_screen; h=""; m=""; s=""; p="" ;;
     c | C) random_color; h=""; m=""; s=""; p="" ;;
   esac
 
