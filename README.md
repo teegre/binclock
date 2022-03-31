@@ -16,6 +16,7 @@ A binary clock made in Bash.
 ## Keybindings
 
 * <kbd>c</kbd> change color.
+* <kbd>d</kbd> display date.
 * <kbd>q</kbd> quit.
 * <kbd>r</kbd> redraw clock.
 
