@@ -24,12 +24,12 @@
 #
 # BinClock
 # C : 2022/03/29
-# M : 2022/03/31
+# M : 2022/04/02
 # D : A binary clock.
 
 _help() {
 cat <<- "EOH"
-BinClock ver 0.1
+BinClock ver 0.010
 
   Display current time in binary form.
 
@@ -94,7 +94,7 @@ init_screen() {
   clear;
   get_scr_size
   ((OY=(LINES/2)-1))
-  ((OX=(COLUMNS/2)-3))
+  ((OX=(COLUMNS/2)-8))
 }
 
 reset_var() { unset hy mm sd ind; }
@@ -110,18 +110,18 @@ display_bin_digit() {
     locate $((y)) $((x))
 
     (( ${D:i:1} == 1 )) && {
-      echo -en "${color}${bold}1${rst}"
+      printf "%b%2s%b" "${color}${bold}" "1" "${rst}"
       locate $((y-1)) $((x))
-      echo -en "${color}${bold}${g}${rst}"
+      printf "%b%2s%b" "${color}${bold}" "${g}" "${rst}"
     }
 
     (( ${D:i:1} == 0 )) && {
-      echo -en "${color}${dim}0${rst}"
+      printf "%b%2s%b" "${color}${dim}" "0" "${rst}"
       locate $((y-1)) $((x))
-      echo -en "${color}${dim}.${rst}"
+      printf "%2s" " "
     }
 
-    ((x++))
+    ((x+=2))
     ((g=g == 1 ? 8 : g/2))
 
   done
@@ -171,20 +171,20 @@ display() {
 
   [[ $SHOWDATE ]] || { [[ $f ]] || { [[ $ind != "$AIND" ]] && {
     ind=$AIND
-    locate $((y)) $((OX+8))
-    ((ind == 1)) && echo -en "${color}${dim}1${rst}"
-    ((ind == 0)) && echo -en "${color}${dim}0${rst}"
-    locate $((y-1)) $((OX+8))
-    ((ind == 1)) && echo -en "${color}${dim}P${rst}"
-    ((ind == 0)) && echo -en "${color}${dim}A${rst}"
+    locate $((y)) $((OX+16))
+    ((ind == 1)) && printf "%b%2s%b" "${color}${dim}" "1" "${rst}"
+    ((ind == 0)) && printf "%b%2s%b" "${color}${dim}" "0" "${rst}"
+    locate $((y-1)) $((OX+16))
+    ((ind == 1)) && printf "%b%2s%b" "${color}${dim}" "P" "${rst}"
+    ((ind == 0)) && printf "%b%2s%b" "${color}${dim}" "A" "${rst}"
   } } }
 
   [[ $SHOWDATE ]] && { [[ $ind != "$AIND" ]] && {
     ind=$AIND
-    locate $((y)) $((OX+8))
-    echo -en "${color}${dim}.${rst}"
-    locate $((y-1)) $((OX+8))
-    echo -en "${color}${dim}D${rst}"
+    locate $((y-1)) $((OX+16))
+    printf "%2s" " "
+    locate $((y)) $((OX+16))
+    printf "%b%2s%b" "${color}${dim}" "D" "${rst}"
   } }
 }
 
@@ -223,5 +223,4 @@ while :; do
 
 done
 
-echo -en "${rst}"
 stty sane; showcursor
