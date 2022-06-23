@@ -79,7 +79,7 @@ _sync() {
   local n=1
   local N
   while (( n !=0 )); do
-    N="${EPOCHREALTIME#*,}"
+    LC_NUMERIC=C N="${EPOCHREALTIME#*.}"
     n=${N:0:1}
     pause 0.0625
   done
